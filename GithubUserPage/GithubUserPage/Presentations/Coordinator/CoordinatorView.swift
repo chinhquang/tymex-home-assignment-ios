@@ -32,14 +32,14 @@ final class Coordinator: ObservableObject {
     func build(page: AppPages) -> some View {
         switch page {
         case .userDetail(let userName):
-            let service = UserService()
-            let userListViewModel = UserListViewModel(service: service)
-            return UserListView(viewModel: userListViewModel)
+            let service = UserDetailService()
+            let viewModel = UserDetailViewModel(service: service, loginName: userName)
+            UserDetailView(viewModel: viewModel)
             
         case .userList:
             let service = UserService()
-            let userListViewModel = UserListViewModel(service: service)
-            return UserListView(viewModel: userListViewModel)
+            let viewModel = UserListViewModel(service: service)
+            UserListView(viewModel: viewModel)
         }
     }
 }

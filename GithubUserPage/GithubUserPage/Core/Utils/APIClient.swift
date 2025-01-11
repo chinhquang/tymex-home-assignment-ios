@@ -74,7 +74,7 @@ class APIClient {
 
         do {
             // Perform network request
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await session.data(for: request)
 
             // Handle HTTP response
             if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
@@ -82,8 +82,12 @@ class APIClient {
             }
 
             // Decode the response
-            let result = try JSONDecoder().decode(T.self, from: data)
-            return .success(result)
+            do {
+                let result = try JSONDecoder().decode(T.self, from: data)
+                return .success(result)
+            } catch {
+                return .failure(APIError.decodingError)
+            }
         } catch {
             throw error is APIError ? error : APIError.unknownError
         }

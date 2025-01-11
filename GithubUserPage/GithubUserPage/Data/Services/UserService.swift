@@ -13,10 +13,16 @@ protocol UserServiceProtocol {
 
 final class UserService: UserServiceProtocol {
 
+    let apiClient: APIClient
+    
+    init(apiClient: APIClient = APIClient.shared) {
+        self.apiClient = apiClient
+    }
+
     func fetchUsers() async throws -> Result<[UserResponse], any Error>  {
         let url = UserURL.users.urlString
         do {
-            let result = try await APIClient.shared.sendRequest(to: url, responseType: [UserResponse].self)
+            let result = try await apiClient.sendRequest(to: url, responseType: [UserResponse].self)
             switch result {
                 
             case .success(let users):

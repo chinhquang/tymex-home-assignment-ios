@@ -1,5 +1,5 @@
 //
-//  UserServiceTest.swift
+//  UserDetailServiceTest.swift
 //  GithubUserPage
 //
 //  Created by chinh on 1/11/25.
@@ -8,16 +8,16 @@
 import XCTest
 @testable import GithubUserPage
 
-final class UserServiceTest: XCTestCase {
+final class UserDetailServiceTest: XCTestCase {
     
     
     var apiClient: APIClient!
-    var userService: UserService!
+    var userService: UserDetailServiceProtocol!
 
     override func setUp() {
         super.setUp()
         apiClient = APIClient(testingSession: MockURLSession.mockResponse(with: nil, error: nil))
-        userService = UserService(apiClient: apiClient)
+        userService = UserDetailService(apiClient: apiClient)
     }
 
     override func tearDown() {
@@ -28,7 +28,7 @@ final class UserServiceTest: XCTestCase {
 
     func testFetchUserListSuccess() async throws {
         // Arrange
-        let mockData = try JSONLoader.loadJSON(from: "mock_users_data_success", in: Bundle(for: type(of: self)))
+        let mockData = try JSONLoader.loadJSON(from: "mock_users_detail_data_success", in: Bundle(for: type(of: self)))
         MockURLProtocol.requestHandler = { _ in
             let response = HTTPURLResponse(url: URL(string: "https://example.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)!
             return (mockData, response, nil)
@@ -36,33 +36,10 @@ final class UserServiceTest: XCTestCase {
         }
         // Act
         do {
-            let result: Result<[UserResponse], any Error> = try await userService.fetchUsers()
+            let result: Result<UserDetailResponse, any Error> = try await userService.fetchUserDetail(loginName: "test")
             switch result {
             case .success(let response):
-                XCTAssertFalse(response.isEmpty, "Expected success but no data returns")
-            case .failure:
-                XCTFail("Expected success, but received failure.")
-            }
-        } catch {
-            XCTFail("Expected success, but received failure.")
-        }
-        
-    }
-    
-    func testFetchUserListEmptySuccess() async throws {
-        // Arrange
-        let mockData = try JSONLoader.loadJSON(from: "mock_users_data_success_empty_data", in: Bundle(for: type(of: self)))
-        MockURLProtocol.requestHandler = { _ in
-            let response = HTTPURLResponse(url: URL(string: "https://example.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)!
-            return (mockData, response, nil)
-            
-        }
-        // Act
-        do {
-            let result: Result<[UserResponse], any Error> = try await userService.fetchUsers()
-            switch result {
-            case .success(let response):
-                XCTAssertTrue(response.isEmpty, "Expected success but no data returns")
+                XCTAssertNotNil(response.id, "Expected success but no data returns")
             case .failure:
                 XCTFail("Expected success, but received failure.")
             }
@@ -82,7 +59,7 @@ final class UserServiceTest: XCTestCase {
         }
         // Act
         do {
-            let result: Result<[UserResponse], any Error> = try await userService.fetchUsers()
+            let result: Result<UserDetailResponse, any Error> = try await userService.fetchUserDetail(loginName: "mockName" )
             switch result {
             case .success(let response):
                 XCTFail("Expected Fail, but received success.")

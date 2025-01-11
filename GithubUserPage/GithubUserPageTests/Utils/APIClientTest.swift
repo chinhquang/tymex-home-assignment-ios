@@ -25,7 +25,7 @@ final class APIClientTest: XCTestCase {
 
     func testSendRequestSuccess() async throws {
         // Arrange
-        let mockData = JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
+        let mockData = try JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
         MockURLProtocol.requestHandler = { _ in
             let response = HTTPURLResponse(url: URL(string: "https://example.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)!
             return (mockData, response, nil)
@@ -46,7 +46,7 @@ final class APIClientTest: XCTestCase {
 
     func testSendRequestDecodingFailure() async throws {
         // Arrange
-        let mockData = JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
+        let mockData = try JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
         MockURLProtocol.requestHandler = { _ in
             let response = HTTPURLResponse(url: URL(string: "https://example.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)!
             return (mockData, response, APIError.decodingError)
@@ -72,7 +72,7 @@ final class APIClientTest: XCTestCase {
     
     func testSendRequestServerFailure() async throws {
         // Arrange
-        let mockData = JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
+        let mockData = try JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
         MockURLProtocol.requestHandler = { _ in
             let response = HTTPURLResponse(url: URL(string: "https://example.com")!, statusCode: 501, httpVersion: nil, headerFields: nil)!
             return (mockData, response, APIError.serverError(statusCode: 501))

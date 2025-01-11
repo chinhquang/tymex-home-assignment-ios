@@ -8,14 +8,19 @@
 import Foundation
 
 struct JSONLoader {
-    static func loadJSON(from fileName: String, in bundle: Bundle = .main) -> Data {
+    enum JSONLoaderError: Error {
+        case fileNotFound(String)
+        case dataLoadError(String, Error)
+    }
+    
+    static func loadJSON(from fileName: String, in bundle: Bundle = .main) throws -> Data {
         guard let url = bundle.url(forResource: fileName, withExtension: "json") else {
-            fatalError("Could not find \(fileName).json in bundle.")
+            throw JSONLoaderError.fileNotFound("\(fileName).json not found in bundle.")
         }
         do {
             return try Data(contentsOf: url)
         } catch {
-            fatalError("Could not load data from \(fileName).json: \(error)")
+            throw JSONLoaderError.dataLoadError("Failed to load data from \(fileName).json", error)
         }
     }
 }

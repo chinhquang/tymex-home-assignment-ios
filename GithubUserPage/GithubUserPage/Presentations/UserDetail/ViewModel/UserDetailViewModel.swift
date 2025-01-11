@@ -29,7 +29,7 @@ final class UserDetailViewModel: ObservableObject {
     }
     
     @MainActor
-    func fetchItems() async {
+    func fetchUserInfo() async {
         isLoading = true
         errorMessage = nil
         do {
@@ -39,7 +39,7 @@ final class UserDetailViewModel: ObservableObject {
                 self.username = userDetail.name ?? ""
                 self.location = userDetail.location ?? ""
                 self.followerCountString = String(format: "%d", userDetail.followers)
-                self.followerCountString = String(format: "%d", userDetail.following)
+                self.followingCountString = String(format: "%d", userDetail.following)
                 self.blog = userDetail.blog ?? ""
                 self.avatarURL = URL(string: userDetail.avatarUrl)
             case .failure(let error):

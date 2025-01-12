@@ -36,13 +36,8 @@ final class UserDetailServiceTest: XCTestCase {
         }
         // Act
         do {
-            let result: Result<UserDetailResponse, any Error> = try await userService.fetchUserDetail(loginName: "test")
-            switch result {
-            case .success(let response):
-                XCTAssertNotNil(response.id, "Expected success but no data returns")
-            case .failure:
-                XCTFail("Expected success, but received failure.")
-            }
+            let result: UserDetailResponse = try await userService.fetchUserDetail(loginName: "test")
+            XCTAssertNotNil(result.id, "Expected success but no data returns")
         } catch {
             XCTFail("Expected success, but received failure.")
         }
@@ -59,14 +54,8 @@ final class UserDetailServiceTest: XCTestCase {
         }
         // Act
         do {
-            let result: Result<UserDetailResponse, any Error> = try await userService.fetchUserDetail(loginName: "mockName" )
-            switch result {
-            case .success(let response):
-                XCTFail("Expected Fail, but received success.")
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                XCTAssertTrue(error is APIError)
-            }
+            let result: UserDetailResponse = try await userService.fetchUserDetail(loginName: "mockName" )
+            XCTFail("Expected Fail, but received success.")
         } catch {
             XCTAssertNotNil(error)
             XCTAssertTrue(error is APIError)

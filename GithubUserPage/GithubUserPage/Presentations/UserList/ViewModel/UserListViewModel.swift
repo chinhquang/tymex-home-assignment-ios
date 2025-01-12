@@ -23,12 +23,7 @@ class UserListViewModel: ObservableObject {
         errorMessage = nil
         do {
             let userServiceResult = try await service.fetchUsers()
-            switch userServiceResult {
-            case .success(let users):
-                self.users = users.map { UserViewModel(from: $0)}
-            case .failure(let error):
-                self.errorMessage = error.localizedDescription
-            }
+            self.users = userServiceResult.map { UserViewModel(from: $0)}
             isLoading = false
         } catch {
             isLoading = false

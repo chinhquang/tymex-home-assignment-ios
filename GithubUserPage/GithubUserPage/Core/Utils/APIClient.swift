@@ -51,7 +51,7 @@ class APIClient {
         queryParams: [String: String]? = nil,
         body: Data? = nil,
         responseType: T.Type
-    ) async throws -> Result<T, any Error> {
+    ) async throws -> T {
         // Build URL
         guard var urlComponents = URLComponents(string: url) else {
             throw APIError.invalidURL
@@ -82,12 +82,8 @@ class APIClient {
             }
 
             // Decode the response
-            do {
-                let result = try JSONDecoder().decode(T.self, from: data)
-                return .success(result)
-            } catch {
-                return .failure(APIError.decodingError)
-            }
+            let result = try JSONDecoder().decode(T.self, from: data)
+            return result
         } catch {
             throw error is APIError ? error : APIError.unknownError
         }

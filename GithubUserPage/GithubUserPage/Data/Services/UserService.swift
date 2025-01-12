@@ -8,7 +8,7 @@
 import Foundation
 
 protocol UserServiceProtocol {
-    func fetchUsers() async throws -> Result<[UserResponse], any Error>
+    func fetchUsers() async throws -> [UserResponse]
 }
 
 final class UserService: UserServiceProtocol {
@@ -19,19 +19,8 @@ final class UserService: UserServiceProtocol {
         self.apiClient = apiClient
     }
 
-    func fetchUsers() async throws -> Result<[UserResponse], any Error>  {
+    func fetchUsers() async throws -> [UserResponse]  {
         let url = UserURL.users.urlString
-        do {
-            let result = try await apiClient.sendRequest(to: url, responseType: [UserResponse].self)
-            switch result {
-                
-            case .success(let users):
-                return .success(users)
-            case .failure(let error):
-                return .failure(error)
-            }
-        } catch let error  {
-            return .failure(error)
-        }
+        return try await apiClient.sendRequest(to: url, responseType: [UserResponse].self)
     }
 }

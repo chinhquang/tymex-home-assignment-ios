@@ -36,13 +36,8 @@ final class UserServiceTest: XCTestCase {
         }
         // Act
         do {
-            let result: Result<[UserResponse], any Error> = try await userService.fetchUsers()
-            switch result {
-            case .success(let response):
-                XCTAssertFalse(response.isEmpty, "Expected success but no data returns")
-            case .failure:
-                XCTFail("Expected success, but received failure.")
-            }
+            let result: [UserResponse] = try await userService.fetchUsers()
+            XCTAssertFalse(result.isEmpty, "Expected success but no data returns")
         } catch {
             XCTFail("Expected success, but received failure.")
         }
@@ -59,13 +54,8 @@ final class UserServiceTest: XCTestCase {
         }
         // Act
         do {
-            let result: Result<[UserResponse], any Error> = try await userService.fetchUsers()
-            switch result {
-            case .success(let response):
-                XCTAssertTrue(response.isEmpty, "Expected success but no data returns")
-            case .failure:
-                XCTFail("Expected success, but received failure.")
-            }
+            let result: [UserResponse] = try await userService.fetchUsers()
+            XCTAssertTrue(result.isEmpty, "Expected success but no data returns")
         } catch {
             XCTFail("Expected success, but received failure.")
         }
@@ -82,14 +72,8 @@ final class UserServiceTest: XCTestCase {
         }
         // Act
         do {
-            let result: Result<[UserResponse], any Error> = try await userService.fetchUsers()
-            switch result {
-            case .success(let response):
-                XCTFail("Expected Fail, but received success.")
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                XCTAssertTrue(error is APIError)
-            }
+            let result: [UserResponse] = try await userService.fetchUsers()
+            XCTFail("Expected Fail, but received success.")
         } catch {
             XCTAssertNotNil(error)
             XCTAssertTrue(error is APIError)

@@ -32,14 +32,13 @@ final class APIClientTest: XCTestCase {
             
         }
         // Act
-        let result: Result<[String: String], any Error> = try await apiClient.sendRequest(
-            to: "https://mockurl.com",
-            responseType: [String: String].self
-        )
-        switch result {
-        case .success(let response):
-            XCTAssertEqual(response["key"], "value")
-        case .failure:
+        do {
+            let result: [String: String] = try await apiClient.sendRequest(
+                to: "https://mockurl.com",
+                responseType: [String: String].self
+            )
+            XCTAssertEqual(result["key"], "value")
+        } catch {
             XCTFail("Expected success, but received failure.")
         }
     }
@@ -54,17 +53,12 @@ final class APIClientTest: XCTestCase {
         }
         // Act
         do {
-            let result: Result<[String: String], any Error> = try await apiClient.sendRequest(
+            let result: [String: String] = try await apiClient.sendRequest(
                 to: "https://mockurl.com",
                 responseType: [String: String].self
             )
             // Assert
-            switch result {
-            case .success:
-                XCTFail("Expected failure, but received success.")
-            case .failure(let error):
-                XCTAssert(error is APIError)
-            }
+            XCTFail("Expected failure, but received success.")
         } catch let error {
             XCTAssert(error is APIError)
         }
@@ -80,17 +74,12 @@ final class APIClientTest: XCTestCase {
         }
         // Act
         do {
-            let result: Result<[String: String], any Error> = try await apiClient.sendRequest(
+            let result: [String: String] = try await apiClient.sendRequest(
                 to: "https://mockurl.com",
                 responseType: [String: String].self
             )
             // Assert
-            switch result {
-            case .success:
-                XCTFail("Expected failure, but received success.")
-            case .failure(let error):
-                XCTAssert(error is APIError)
-            }
+            XCTFail("Expected failure, but received success.")
         } catch let error {
             XCTAssert(error is APIError)
         }

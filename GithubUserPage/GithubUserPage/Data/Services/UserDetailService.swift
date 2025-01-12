@@ -8,7 +8,7 @@
 import Foundation
 
 protocol UserDetailServiceProtocol {
-    func fetchUserDetail(loginName: String) async throws -> Result<UserDetailResponse, any Error>
+    func fetchUserDetail(loginName: String) async throws -> UserDetailResponse
 }
 
 final class UserDetailService: UserDetailServiceProtocol {
@@ -19,19 +19,9 @@ final class UserDetailService: UserDetailServiceProtocol {
         self.apiClient = apiClient
     }
 
-    func fetchUserDetail(loginName: String) async throws -> Result<UserDetailResponse, any Error> {
+    func fetchUserDetail(loginName: String) async throws -> UserDetailResponse {
         let url = UserURL.userDetail(userName: loginName).urlString
-        do {
-            let result = try await apiClient.sendRequest(to: url, responseType: UserDetailResponse.self)
-            switch result {
-                
-            case .success(let userDetail):
-                return .success(userDetail)
-            case .failure(let error):
-                return .failure(error)
-            }
-        } catch let error  {
-            return .failure(error)
-        }
+        let result = try await apiClient.sendRequest(to: url, responseType: UserDetailResponse.self)
+        return result
     }
 }

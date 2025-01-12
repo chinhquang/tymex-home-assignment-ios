@@ -33,18 +33,13 @@ final class UserDetailViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         do {
-            let userServiceResult = try await service.fetchUserDetail(loginName: loginName)
-            switch userServiceResult {
-            case .success(let userDetail):
-                self.username = userDetail.name ?? ""
-                self.location = userDetail.location ?? ""
-                self.followerCountString = String(format: "%d", userDetail.followers)
-                self.followingCountString = String(format: "%d", userDetail.following)
-                self.blog = userDetail.blog ?? ""
-                self.avatarURL = URL(string: userDetail.avatarUrl)
-            case .failure(let error):
-                self.errorMessage = error.localizedDescription
-            }
+            let userDetail = try await service.fetchUserDetail(loginName: loginName)
+            self.username = userDetail.name ?? ""
+            self.location = userDetail.location ?? ""
+            self.followerCountString = String(format: "%d", userDetail.followers)
+            self.followingCountString = String(format: "%d", userDetail.following)
+            self.blog = userDetail.blog ?? ""
+            self.avatarURL = URL(string: userDetail.avatarUrl)
             isLoading = false
         } catch {
             isLoading = false

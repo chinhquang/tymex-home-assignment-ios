@@ -11,6 +11,7 @@ struct UserListView: View {
 
     @StateObject private var viewModel: UserListViewModel
     @EnvironmentObject private var coordinator: Coordinator
+    
 
     init(viewModel: UserListViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -19,7 +20,7 @@ struct UserListView: View {
     var body: some View {
         Group {
             if viewModel.isLoading {
-                ProgressView("Loading Photos...")
+                ProgressView("Loading Users...")
             } else if let errorMessage = viewModel.errorMessage {
                 Text("Error: \(errorMessage)")
                     .foregroundColor(.red)
@@ -81,8 +82,16 @@ struct UserListView: View {
                 .background(Color(.systemGroupedBackground))
             }
         }
-        .task {
-            await viewModel.fetchItems()
+        .onAppear {
+            if !viewModel.hasLoaded {
+                Task {
+                    await viewModel.fetchItems()
+                }
+                viewModel.hasLoaded = true
+            }
+        }
+        .refreshable {
+            await viewModel.refresh()
         }
         .navigationTitle("Github Users")
         .navigationBarTitleDisplayMode(.inline)

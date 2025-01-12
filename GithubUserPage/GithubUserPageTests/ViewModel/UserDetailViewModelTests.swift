@@ -18,7 +18,7 @@ final class UserDetailViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         let mockSession = MockURLSession.mockResponse(with: nil, error: nil)
-        apiClient = APIClient(testingSession: mockSession)
+        apiClient = APIClient(session: mockSession)
         mockService = UserDetailService(apiClient: apiClient)
         viewModel = UserDetailViewModel(service: mockService, loginName: "mock_name")
     }
@@ -46,7 +46,7 @@ final class UserDetailViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.username.isEmpty, "Expect user name not empty")
     }
     
-    func testFetchPhotosClientError_Failure() async {
+    func testFetchUsersClientError_Failure() async {
         // Given
         let mockData = try? JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
         MockURLProtocol.requestHandler = { _ in
@@ -62,7 +62,7 @@ final class UserDetailViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.username.isEmpty)
     }
     
-    func testFetchPhotosServerError_Failure() async {
+    func testFetchUsersServerError_Failure() async {
         // Given
         let mockData = try? JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
         MockURLProtocol.requestHandler = { _ in
@@ -78,7 +78,7 @@ final class UserDetailViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.username.isEmpty)
     }
 
-    func testFetchPhotosUnknownError_Failure() async {
+    func testFetchUsersUnknownError_Failure() async {
         // Given
         let mockData = try? JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
         MockURLProtocol.requestHandler = { _ in

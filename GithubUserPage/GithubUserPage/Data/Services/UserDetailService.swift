@@ -15,7 +15,7 @@ final class UserDetailService: UserDetailServiceProtocol {
 
     let apiClient: APIClient
     
-    init(apiClient: APIClient = APIClient.shared) {
+    init(apiClient: APIClient = APIClient()) {
         self.apiClient = apiClient
     }
 

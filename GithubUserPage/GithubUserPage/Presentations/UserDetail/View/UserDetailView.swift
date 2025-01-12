@@ -9,17 +9,17 @@ import SwiftUI
 
 struct UserDetailView: View {
 
-    @StateObject private var viewModel: UserDetailViewModel
+    @ObservedObject private var viewModel: UserDetailViewModel
     @EnvironmentObject private var coordinator: Coordinator
 
     init(viewModel: UserDetailViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
+        self.viewModel = viewModel
     }
 
     var body: some View {
         Group {
             if viewModel.isLoading {
-                ProgressView("Loading Photos...")
+                ProgressView("Loading Users...")
             } else if let errorMessage = viewModel.errorMessage {
                 Text("Error: \(errorMessage)")
                     .foregroundColor(.red)

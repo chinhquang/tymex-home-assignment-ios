@@ -30,18 +30,12 @@ enum UserURL {
     }
 }
 
-class APIClient {
-
-    static let shared = APIClient()
+actor APIClient {
 
     private let session: URLSession
 
-    private init(session: URLSession = URLSession.shared) {
+    init(session: URLSession = URLSession.shared) {
         self.session = session
-    }
-
-    init(testingSession: URLSession) {
-        self.session = testingSession
     }
     
     func sendRequest<T: Decodable>(

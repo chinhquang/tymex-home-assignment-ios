@@ -15,7 +15,7 @@ final class APIClientTest: XCTestCase {
     override func setUp() {
         super.setUp()
         let mockSession = MockURLSession.mockResponse(with: nil, error: nil)
-        apiClient = APIClient(testingSession: mockSession)
+        apiClient = APIClient(session: mockSession)
     }
 
     override func tearDown() {
@@ -53,7 +53,7 @@ final class APIClientTest: XCTestCase {
         }
         // Act
         do {
-            let result: [String: String] = try await apiClient.sendRequest(
+            let _: [String: String] = try await apiClient.sendRequest(
                 to: "https://mockurl.com",
                 responseType: [String: String].self
             )
@@ -74,7 +74,7 @@ final class APIClientTest: XCTestCase {
         }
         // Act
         do {
-            let result: [String: String] = try await apiClient.sendRequest(
+            let _: [String: String] = try await apiClient.sendRequest(
                 to: "https://mockurl.com",
                 responseType: [String: String].self
             )

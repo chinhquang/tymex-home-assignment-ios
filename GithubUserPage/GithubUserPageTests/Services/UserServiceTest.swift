@@ -16,7 +16,7 @@ final class UserServiceTest: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        apiClient = APIClient(testingSession: MockURLSession.mockResponse(with: nil, error: nil))
+        apiClient = APIClient(session: MockURLSession.mockResponse(with: nil, error: nil))
         userService = UserService(apiClient: apiClient)
     }
 

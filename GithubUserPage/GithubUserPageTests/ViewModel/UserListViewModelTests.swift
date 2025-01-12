@@ -18,7 +18,7 @@ final class UserListViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         let mockSession = MockURLSession.mockResponse(with: nil, error: nil)
-        apiClient = APIClient(testingSession: mockSession)
+        apiClient = APIClient(session: mockSession)
         mockService = UserService(apiClient: apiClient)
         viewModel = UserListViewModel(service: mockService)
     }
@@ -47,7 +47,7 @@ final class UserListViewModelTests: XCTestCase {
         XCTAssertNotNil(viewModel.users.first?.id)
     }
     
-    func testFetchPhotosClientError_Failure() async throws {
+    func testFetchUsersClientError_Failure() async throws {
         // Given
         let mockData = try JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
         MockURLProtocol.requestHandler = { _ in
@@ -63,7 +63,7 @@ final class UserListViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.users.count, 0)
     }
     
-    func testFetchPhotosServerError_Failure() async throws {
+    func testFetchUsersServerError_Failure() async throws {
         // Given
         let mockData = try JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
         MockURLProtocol.requestHandler = { _ in
@@ -79,7 +79,7 @@ final class UserListViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.users.count, 0)
     }
 
-    func testFetchPhotosUnknownError_Failure() async throws {
+    func testFetchUsersUnknownError_Failure() async throws {
         // Given
         let mockData = try JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
         MockURLProtocol.requestHandler = { _ in
@@ -96,7 +96,7 @@ final class UserListViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.users.count, 0)
     }
     
-    func testFetchPhotos_LoadingState() async throws {
+    func testFetchUsers_LoadingState() async throws {
         // Given
         let mockData = try JSONLoader.loadJSON(from: "mock_api_client_data", in: Bundle(for: type(of: self)))
         MockURLProtocol.requestHandler = { _ in

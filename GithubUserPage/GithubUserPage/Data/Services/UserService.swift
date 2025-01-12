@@ -15,7 +15,7 @@ final class UserService: UserServiceProtocol {
 
     let apiClient: APIClient
     
-    init(apiClient: APIClient = APIClient.shared) {
+    init(apiClient: APIClient = APIClient()) {
         self.apiClient = apiClient
     }
 
